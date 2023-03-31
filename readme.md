@@ -29,3 +29,7 @@ or
 ```
 npm run start
 ```
+
+## 下記ソースで typscript の文法などを検証する
+
+[index.tsx](./index.ts)

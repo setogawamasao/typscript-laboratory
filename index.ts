@@ -1,4 +1,4 @@
-type Params = {
+export type Params = {
   param01?: string;
   param02?: string;
   param03?: string;
@@ -12,9 +12,11 @@ export const emptyParams: Params = {
 
 export type paramKey = "param01" | "param02" | "param03";
 
-// ↑ここより上は仕方がない
+// ↑ここより上は行数が増えても仕方がない(types)
+// ↑ここより上はtypes
+// ↓ここより下はdomains
 
-class MemberInfo {
+export class MemberInfo {
   params: Params;
   constructor(params?: Params) {
     if (params) {
@@ -43,23 +45,38 @@ class MemberInfo {
   }
 }
 
+// 検証
 const testFunc1 = () => {
-  const requestParam2: Params = {
+  const requestParam: Params = {
     param01: "aaa",
     param02: null,
     param03: "ccc",
   };
 
   const memberInfo = new MemberInfo();
-  memberInfo.setParams(requestParam2);
+  memberInfo.setParams(requestParam);
 
   console.log(memberInfo.params);
   console.log(memberInfo.params["param01"]);
 
   memberInfo.setParam("param02", "bbb");
+  // memberInfo.setParam("param0", "bbb"); // ストリングリテラルでkeyはガードされているためエラー
   console.log(memberInfo.params);
-  // 下記設定はエラー
-  // memberInfo.setParam("param0", "bbb");
+
+  // memberInfoを使って新たな型
+  type Hoge = {
+    name: string;
+    mail: string;
+    memberInfo: MemberInfo;
+  };
+
+  const hoge: Hoge = {
+    name: "taro",
+    mail: "taro@test.com",
+    memberInfo: memberInfo,
+  };
+  hoge.memberInfo.setParam("param01", "hogehoge");
+  console.log(hoge.memberInfo.params["param01"]);
 };
 
 testFunc1();
